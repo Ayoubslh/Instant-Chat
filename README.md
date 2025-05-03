@@ -43,7 +43,15 @@ Compose new messages directly through the app with AI-generated content when you
 
 ### 1. Clone the Repo
 ```bash
-git clone https://github.com/your-username/ai-inbox-agent.git
-cd ai-inbox-agent
+git clone https://github.com/Abd-echafi/Async.git
+cd front
 npm install
+npm run dev
+put .env file in the project root of the backend folder
+cd back
+npm install
+npm start
+```
+
+
 
