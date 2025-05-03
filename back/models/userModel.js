@@ -59,17 +59,6 @@ const userSchema = new mongoose.Schema(
             enum: ["Client", "Admin"],
             default: "Client",
         },
-        linkedEmails: {
-            type: [String],
-            validate: {
-                validator: function (emails) {
-                    return emails.every(email => /^\S+@\S+\.\S+$/.test(email));
-                },
-                message: "Each linked email must be a valid email address",
-            },
-            default: [],
-        },
-        
         image: {
             type: String,
         },
