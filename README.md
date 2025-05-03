@@ -67,9 +67,9 @@ npm start
   async.hackateam@gmail.com
   ```
 - password:
-```bash
-async@hackthon#for#postman@access
-```
+- ```bash
+  async@hackthon#for#postman@access
+  ```
 
 ## 3. The Lien of the google docs for the env file
 
