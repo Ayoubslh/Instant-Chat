@@ -74,8 +74,7 @@ npm start
 - why ?
 - this app uses gmail api and our app is under review so it obliges us to specify specific emails to just test the app until they approve our app 
 
-## 3. The Lien of the google docs for the env file
+## 3. The link of the google docs for the env file
 
-- lien: https://docs.google.com/document/d/1HfniV1fsKmZWn8QLBBUG89lY4t2fv3aXVUnmzTZR90U/edit?usp=sharing
-- Login the web application with OAuth (
-- 
+- lien: /
+- Login the web application with OAuth 
