@@ -1,4 +1,4 @@
-# Async
+# inboxAI
 
 # 📧 AI Inbox Agent – Reclaim Your Time with Smart Email Management
 
