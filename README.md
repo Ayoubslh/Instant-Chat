@@ -64,11 +64,11 @@ npm start
 
 - email:
 - ```bash
-  async.hackateam@gmail.com
+  a***m@gmail.com
   ```
 - password:
 - ```bash
-  async@hackthon#for#postman@access
+  ****
   ```
 - Login with OAuth google and our email
 - why ?
