@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+
+    <div class="flex w-3/4 h-[80vh] bg-white shadow-lg rounded-lg overflow-hidden">
+        <!-- Sidebar (Rooms List) -->
+        <div class="w-1/4 bg-gray-200 p-4">
+            <h2 class="text-lg font-semibold mb-3">Rooms</h2>
+            <ul id="rooms-list" class="space-y-2">
+                <!-- Rooms will be added dynamically here -->
+            </ul>
+            <input type="text" id="room-name" placeholder="New Room" class="w-full p-2 mt-3 border rounded">
+            <button onclick="createRoom()" class="w-full mt-2 bg-blue-500 text-white py-2 rounded">Create Room</button>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="w-3/4 flex flex-col">
+            <div class="flex justify-between items-center bg-blue-500 text-white p-4">
+                <h2 id="current-room">Select a Room</h2>
+            </div>
+            
+            <div id="chat-box" class="flex-1 p-4 overflow-y-auto bg-gray-50"></div>
+
+            <!-- Message Input -->
+            <div class="flex p-4 border-t">
+                <input type="text" id="message" class="flex-1 p-2 border rounded" placeholder="Type a message...">
+                <button onclick="sendMessage()" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+            </div>
+        </div>
+
+        <!-- Sidebar (Users List) -->
+        <div class="w-1/4 bg-gray-200 p-4">
+            <h2 class="text-lg font-semibold mb-3">Users</h2>
+            <ul id="users-list" class="space-y-2">
+                <!-- Users will be added dynamically here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const ws = new WebSocket("ws://localhost:8080");
+        let currentRoom = null;
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === "message") {
+                document.getElementById("chat-box").innerHTML += `<p class="p-2 bg-blue-100 rounded mb-2">${data.text}</p>`;
+            } else if (data.type === "users") {
+                updateUsersList(data.users);
+            }
+        };
+
+        function createRoom() {
+            const roomName = document.getElementById("room-name").value;
+            if (roomName) joinRoom(roomName);
+        }
+
+        function joinRoom(room) {
+            currentRoom = room;
+            document.getElementById("current-room").textContent = `Room: ${room}`;
+            document.getElementById("chat-box").innerHTML = ""; 
+
+            ws.send(JSON.stringify({ type: "join", room }));
+            loadRooms();
+        }
+
+        function sendMessage() {
+            const message = document.getElementById("message").value;
+            if (message && currentRoom) {
+                ws.send(JSON.stringify({ type: "message", text: message }));
+                document.getElementById("chat-box").innerHTML += `<p class="p-2 bg-gray-200 rounded self-end mb-2">${message}</p>`;
+                document.getElementById("message").value = "";
+            }
+        }
+
+        function updateUsersList(users) {
+            const userList = document.getElementById("users-list");
+            userList.innerHTML = "";
+            users.forEach(user => {
+                userList.innerHTML += `<li class="p-2 bg-gray-300 rounded">${user}</li>`;
+            });
+        }
+
+        async function loadRooms() {
+            const response = await fetch("http://localhost:3000/rooms");
+            const rooms = await response.json();
+            const roomList = document.getElementById("rooms-list");
+            roomList.innerHTML = "";
+            rooms.forEach(room => {
+                roomList.innerHTML += `<li class="p-2 bg-white border rounded cursor-pointer" onclick="joinRoom('${room}')">${room}</li>`;
+            });
+        }
+
+        loadRooms();
+    </script>
+</body>
+</html>
